@@ -1,0 +1,232 @@
+### GET empty clubs list
+GET {{host}}/api/clubs
+
+### GET empty club
+GET {{host}}/api/clubs/1
+
+### POST Club 1
+POST {{host}}/api/clubs
+Content-Type: application/json
+
+{
+  "name": "Platinium AP16",
+  "address": "Aleja Pokoju 16, Kraków",
+  "whenOpen": {
+    "MONDAY": {
+      "from": "06:00", "to": "23:00"
+    },
+    "TUESDAY": {
+      "from": "07:00", "to": "23:00"
+    },
+    "WEDNESDAY": {
+      "from": "07:00", "to": "23:00"
+    },
+    "THURSDAY": {
+      "from": "07:00", "to": "23:00"
+    },
+    "FRIDAY": {
+      "from": "07:00", "to": "22:00"
+    },
+    "SATURDAY": {
+      "from": "09:00", "to": "20:00"
+    },
+    "SUNDAY": {
+      "from": "10:00", "to": "19:00"
+    }
+  }
+}
+
+### POST Club 2
+POST {{host}}/api/clubs
+Content-Type: application/json
+
+{
+  "name": "Platinium Solvay",
+  "address": "Zakopiańska 105, Kraków",
+  "whenOpen": {
+    "MONDAY": {
+      "from": "09:00", "to": "20:00"
+    },
+    "TUESDAY": {
+      "from": "09:00", "to": "20:00"
+    },
+    "WEDNESDAY": {
+      "from": "09:00", "to": "20:00"
+    },
+    "THURSDAY": {
+      "from": "09:00", "to": "20:00"
+    },
+    "FRIDAY": {
+      "from": "09:00", "to": "20:00"
+    }
+  }
+}
+
+### GET clubs list
+GET {{host}}/api/clubs
+
+### GET 1st club
+GET {{host}}/api/clubs/1
+
+### GET 2nd club
+GET {{host}}/api/clubs/2
+
+### GET Coaches
+GET {{host}}/api/coaches
+
+### GET empty coach
+GET {{host}}/api/coaches/1
+
+### POST Coach 1
+POST {{host}}/api/coaches
+Content-Type: application/json
+
+{
+  "firstName": "Arkadiusz",
+  "lastName": "Sokołowski",
+  "yearOfBirth": 1978
+}
+
+### POST Coach 2
+POST {{host}}/api/coaches
+Content-Type: application/json
+
+{
+  "firstName": "Ygrek",
+  "lastName": "Iksiński",
+  "yearOfBirth": 1990
+}
+
+### GET Coaches
+GET {{host}}/api/coaches
+
+### GET Coach 1
+GET {{host}}/api/coaches/1
+
+### PATCH Coach 2
+PATCH {{host}}/api/coaches/2
+Content-Type: application/json
+
+{
+  "firstName": "Ygrek",
+  "lastName": "Iksiński",
+  "yearOfBirth": 1991
+}
+
+### GET Coach 2
+GET {{host}}/api/coaches/2
+
+### DELETE Coach 2
+DELETE {{host}}/api/coaches/2
+
+### GET Coach 2
+GET {{host}}/api/coaches/2
+
+### GET Coaches
+GET {{host}}/api/coaches
+
+### POST Coach 3
+POST {{host}}/api/coaches
+Content-Type: application/json
+
+{
+  "firstName": "Trainer",
+  "lastName": "The Third",
+  "yearOfBirth": 1999
+}
+
+### GET Events
+GET {{host}}/api/events
+
+### POST Event 1
+POST {{host}}/api/events
+Content-Type: application/json
+
+{
+  "title": "Zumba",
+  "day": "MONDAY",
+  "time": "09:00",
+  "duration": "PT60M",
+  "clubId": 1,
+  "coachId": 1
+}
+
+### GET Events
+GET {{host}}/api/events
+
+### POST Event 2
+POST {{host}}/api/events
+Content-Type: application/json
+
+{
+  "title": "Yoga",
+  "day": "MONDAY",
+  "time": "10:10",
+  "duration": "PT70M",
+  "clubId": 1,
+  "coachId": 2
+}
+
+### POST Event 3
+POST {{host}}/api/events
+Content-Type: application/json
+
+{
+  "title": "Zumba",
+  "day": "TUESDAY",
+  "time": "10:30",
+  "duration": "PT55M",
+  "clubId": 2,
+  "coachId": 1
+}
+
+### POST Event 4
+POST {{host}}/api/events
+Content-Type: application/json
+
+{
+  "title": "Pilates",
+  "day": "TUESDAY",
+  "time": "13:00",
+  "duration": "PT45M",
+  "clubId": 2,
+  "coachId": 2
+}
+
+### POST Event 5
+POST {{host}}/api/events
+Content-Type: application/json
+
+{
+  "title": "Stretching",
+  "day": "THURSDAY",
+  "time": "12:00",
+  "duration": "PT70M",
+  "clubId": 2,
+  "coachId": 1
+}
+
+### GET Events
+GET {{host}}/api/events
+
+### GET Events for coach 1
+GET {{host}}/api/events?coachId=1
+
+### GET Events for club 2
+GET {{host}}/api/events?clubId=2
+
+### PATCH Event 5
+PATCH {{host}}/api/events/5
+Content-Type: application/json
+
+{
+  "title": "Stretching",
+  "day": "THURSDAY",
+  "time": "12:00",
+  "duration": "PT60M",
+  "clubId": 2,
+  "coachId": 1
+}
+
+### GET Event 5
+GET {{host}}/api/events/5

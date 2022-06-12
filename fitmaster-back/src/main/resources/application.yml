@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    database-platform: ${DATABASE_DIALECT}
+  profiles:
+    active: ${CONFIG_PROFILES}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-custom.html
+logging:
+  level: 
+    fitmaster: DEBUG
+  file:
+    path: src/main/resources/log

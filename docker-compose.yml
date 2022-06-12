@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  fitmaster-db:
+    container_name: fitmaster-database
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+  
+  fitmaster-back:
+    container_name: fitmaster-backend
+    image: fitmaster-back:latest
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_URL: mysql://root:root@fitmaster-db:3306/fitmaster?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=True
+      DATABASE_DIALECT: org.hibernate.dialect.MySQL5Dialect
+    links:
+      - fitmaster-db
+  fitmaster-front:
+    container_name: fitmaster-frontend
+    image: fitmaster-front:latest
+    ports: 
+      - 3000:3000
+    environment:
+      - REACT_APP_BACKEND_URL=http://127.0.0.1:8080
+    links:
+      - fitmaster-back
