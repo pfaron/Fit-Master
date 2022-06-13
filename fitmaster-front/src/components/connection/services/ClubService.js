@@ -1,6 +1,6 @@
 import http from "../http-common";
 
-const prefix = 'coaches';
+const prefix = 'clubs';
 
 const getAll = pageable => {
   return http.get(`/${prefix}?size=${pageable.pageSize}&page=${pageable.currentPage}`);
@@ -17,11 +17,11 @@ const update = (id, data) => {
 const remove = id => {
   return http.delete(`/${prefix}/${id}`);
 };
-const CoachService = {
+const ClubService = {
   getAll,
   get,
   create,
   update,
   remove
 };
-export default CoachService;
+export default ClubService;

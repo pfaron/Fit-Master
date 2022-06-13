@@ -5,6 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,6 +31,7 @@ public class ClubService {
     }
 
     public void addClub(ClubDto clubDto) {
+        clubDto = refactorClub(clubDto);
         constraintsChecker.checkAddConstraints(clubDto);
         clubRepo.save(new Club(clubDto.getName(), clubDto.getAddress(), clubDto.getWhenOpen()));
     }
@@ -41,5 +45,23 @@ public class ClubService {
     public void removeClub(long clubId) {
         constraintsChecker.checkDeleteConstraints(clubId);
         clubRepo.deleteById(clubId);
+    }
+
+    private ClubDto refactorClub(ClubDto club) {
+        Map<DayOfWeek, OpenHours> newMap = new HashMap<>();
+        for (var entry : club.getWhenOpen().entrySet()) {
+            var from = entry.getValue().getFrom();
+            var to = entry.getValue().getTo();
+            if (from != null && to != null) {
+                newMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return ClubDto
+                .builder()
+                .id(club.getId())
+                .name(club.getName())
+                .address(club.getAddress())
+                .whenOpen(newMap)
+                .build();
     }
 }

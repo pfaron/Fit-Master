@@ -18,12 +18,3 @@ services:
       DATABASE_DIALECT: org.hibernate.dialect.MySQL5Dialect
     links:
       - fitmaster-db
-  fitmaster-front:
-    container_name: fitmaster-frontend
-    image: fitmaster-front:0.1
-    ports: 
-      - 3000:3000
-    environment:
-      - REACT_APP_BACKEND_URL=http://127.0.0.1:8080
-    links:
-      - fitmaster-back

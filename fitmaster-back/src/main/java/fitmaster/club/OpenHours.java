@@ -3,6 +3,7 @@ package fitmaster.club;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -11,6 +12,7 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class OpenHours {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
