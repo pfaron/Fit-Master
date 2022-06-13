@@ -2,8 +2,9 @@ import http from "../http-common";
 
 const prefix = 'coaches';
 
-const getAll = pageable => {
-  return http.get(`/${prefix}?size=${pageable.pageSize}&page=${pageable.currentPage}`);
+const getAll = params => {
+  const { pageSize, currentPage } = params;
+  return http.get(`/${prefix}?size=${pageSize}&page=${currentPage}`);
 };
 const get = id => {
   return http.get(`/${prefix}/${id}`);

@@ -8,6 +8,8 @@ import MainPage from "../main/MainPage";
 import RouteClub from "../club/RouteClub";
 import AddClub from "../club/AddClub";
 import ListClubs from "../club/ListClubs";
+import ListClubEvents from "../event/ListClubEvents";
+import ListScheduledEvents from "../scheduled/ListScheduledEvents";
 
 const AllRoutes = () => {
     return (
@@ -21,6 +23,8 @@ const AllRoutes = () => {
                 <Route path="/clubs" element={<RouteClub />} />
                 <Route path="/clubs/list" element={<ListClubs />} />
                 <Route path="/clubs/add" element={<AddClub />} />
+                <Route path="/events/list/:clubId" element={<ListClubEvents />} />
+                <Route path="/events/scheduled/list" element={<ListScheduledEvents />} />
             </Routes>
         </div>
     )

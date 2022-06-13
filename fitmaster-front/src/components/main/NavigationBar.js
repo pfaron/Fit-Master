@@ -6,7 +6,7 @@ const NavigationBar = () => {
         <div>
             <nav className="navbar navbar-expand navbar-dark bg-dark">
                 <a href="/" className="navbar-brand">
-                    <img src="./fit-master-logo.png" width="auto" height="40" alt="logo" />
+                    <img src="./fit-master-logo.png" width="auto" height="40" alt="fit master" />
                 </a>
                 <div className="navbar-nav mr-auto">
                     <li className="nav-item">
@@ -17,6 +17,11 @@ const NavigationBar = () => {
                     <li className="nav-item">
                         <Link to={"/clubs"} className="nav-link">
                             clubs
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to={"/events/scheduled/list"} className="nav-link">
+                            events
                         </Link>
                     </li>
                 </div>

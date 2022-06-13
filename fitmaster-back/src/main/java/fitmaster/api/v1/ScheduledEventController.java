@@ -31,7 +31,7 @@ public class ScheduledEventController {
 
     @GetMapping
     @Operation(summary = "Returns a page with scheduled events of the given size and sorting.")
-    public Page<ScheduledEventDto> getAllClubs(@PageableDefault(size = 50)
+    public Page<ScheduledEventDto> getAllScheduledEvents(@PageableDefault(size = 50)
                                                @SortDefault(sort = "rescheduledDate")
                                                        Pageable p) {
         return scheduledEventService.getScheduledEventsPage(p);

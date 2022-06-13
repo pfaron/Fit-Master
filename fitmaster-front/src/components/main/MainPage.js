@@ -2,21 +2,22 @@ import { Link } from "react-router-dom";
 
 const MainPage = () => {
     return (
-        <div>
-            <nav className="navbar navbar-expand navbar-dark bg-dark">
-                <div className="navbar-nav mr-auto">
-                    <li className="nav-item">
-                        <Link to={"/coaches"} className="nav-link">
-                            coaches
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to={"/clubs"} className="nav-link">
-                            coaches
-                        </Link>
-                    </li>
-                </div>
-            </nav>
+        <div className="row">
+            <div className="col-auto">
+                <Link to={"/clubs/"} className={"btn btn-secondary btn-lg btn-block"}>
+                    Clubs
+                </Link>
+            </div>
+            <div className="col-auto">
+                <Link to={"/coaches/"} className={"btn btn-secondary btn-lg btn-block"}>
+                    Coaches
+                </Link>
+            </div>
+            <div className="col-auto">
+                <Link to={"/events/scheduled/list"} className={"btn btn-secondary btn-lg btn-block"}>
+                    Events
+                </Link>
+            </div>
         </div>
     )
 }

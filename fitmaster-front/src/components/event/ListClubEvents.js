@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-import RouteClub from "./RouteClub";
+import EventService from "../connection/services/EventService";
+import CoachService from "../connection/services/CoachService";
 import ClubService from "../connection/services/ClubService";
 
-const ListClubs = () => {
+const ListClubEvents = props => {
+    const { clubId } = useParams();
 
-    const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
-
-    const [clubs, setClubs] = useState([]);
+    const [events, setEvents] = useState([]);
     const [numberOfPages, setNumberOfPages] = useState(0);
 
-    const [currentClub, setCurrentClub] = useState(null);
+    const [currentEvent, setCurrentEvent] = useState(null);
+    const [currentCoachName, setCurrentCoachName] = useState("");
+    const [currentClubName, setCurrentClubName] = useState("");
     const [currentIndex, setCurrentIndex] = useState(-1);
 
     const [maxButtons] = useState(5);
@@ -22,17 +25,19 @@ const ListClubs = () => {
     const pageSizes = [5, 10, 20];
 
     const refreshList = () => {
-        retrieveClubs();
-        setCurrentClub(null);
+        retrieveEvents();
+        setCurrentEvent(null);
+        setCurrentCoachName('');
+        setCurrentClubName('');
         setCurrentIndex(-1);
     };
 
     useEffect(refreshList, [currentPage, pageSize]);
 
-    const retrieveClubs = () => {
-        ClubService.getAll({ currentPage, pageSize })
+    const retrieveEvents = () => {
+        EventService.getAllByClubId({ clubId, currentPage, pageSize })
             .then(response => {
-                setClubs(response.data.content);
+                setEvents(response.data.content);
                 setNumberOfPages(response.data.totalPages);
                 console.log(response);
             })
@@ -53,14 +58,35 @@ const ListClubs = () => {
         setCurrentPage(0);
     };
 
-    const setActiveClub = (club, index) => {
-        setCurrentClub(club);
+    useEffect(() => {
+        if (currentEvent) {
+            CoachService.get(currentEvent.coachId)
+                .then(response => {
+                    setCurrentCoachName(response.data.firstName + ' ' + response.data.lastName);
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
+            ClubService.get(currentEvent.clubId)
+                .then(response => {
+                    setCurrentClubName(response.data.name);
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        }
+    }, [currentEvent])
+
+    const setActiveEvent = (event, index) => {
+        setCurrentEvent(event);
         setCurrentIndex(index);
     };
 
     return (
         <div>
-            <RouteClub activePage="list" />
             <div className="list row">
                 <div className="my-3">
                     {"Items per Page: "}
@@ -73,60 +99,77 @@ const ListClubs = () => {
                     </select>
                 </div>
                 <div className="col-md-6">
-                    <h4>Clubs list</h4>
+                    <h4>Events list</h4>
                     <ul className="list-group">
-                        {clubs &&
-                            clubs.map((club, index) => (
+                        {events &&
+                            events.map((event, index) => (
                                 <li
                                     className={
                                         "list-group-item " + (index === currentIndex ? "active" : "")
                                     }
-                                    onClick={() => setActiveClub(club, index)}
+                                    onClick={() => setActiveEvent(event, index)}
                                     key={index}
                                 >
-                                    {club.name}
+                                    {event.title}
                                 </li>
                             ))}
                     </ul>
                 </div>
                 <div className="col-md-6">
-                    {currentClub ? (
+                    {currentEvent ? (
                         <div>
-                            <h4>{currentClub.name}</h4>
+                            <h4>{currentEvent.title}</h4>
                             <div>
                                 <label>
-                                    <strong>Address:</strong>
+                                    <strong>Day of week:</strong>
                                 </label>{" "}
-                                {currentClub.address}
+                                {currentEvent.dayOfWeek}
                             </div>
                             <div>
                                 <label>
-                                    <strong>Open times:</strong>
+                                    <strong>Time:</strong>
                                 </label>{" "}
-                                <ul className="list-group">
-                                    {daysOfWeek.map((day, index) => (
-                                        <li
-                                            className={"list-group-item"}
-                                            key={index}
-                                        >
-                                            {day}:{' '}
-                                            {(currentClub.whenOpen[day].from === "00:00:00" && currentClub.whenOpen[day].to === "00:00:00" ? "closed" :
-                                                currentClub.whenOpen[day].from + ' - ' + currentClub.whenOpen[day].to)}
-                                        </li>
-                                    ))}
-                                </ul>
+                                {currentEvent.beginningTime.slice(0, 5)} - {currentEvent.endingTime.slice(0, 5)}
                             </div>
-                            <Link
-                                to={`/events/list/${currentClub.id}`}
-                                className="btn btn-primary m-2"
+                            <div>
+                                <label>
+                                    <strong>Participants limit:</strong>
+                                </label>{" "}
+                                {currentEvent.participantsLimit}
+                            </div>
+                            <div>
+                                <label>
+                                    <strong>Coach:</strong>
+                                </label>{" "}
+                                <Link
+                                    to={`/coaches/${currentEvent.coachId}`}
+                                    className="link"
+                                >
+                                    {currentCoachName}
+                                </Link>
+                            </div>
+                            <div>
+                                <label>
+                                    <strong>Club:</strong>
+                                </label>{" "}
+                                <Link
+                                    to={`/clubs/list`}
+                                    className="link"
+                                >
+                                    {currentClubName}
+                                </Link>
+                            </div>
+                            {/* <Link
+                                to={"/coaches/" + currentCoach.id}
+                                className="btn btn-primary"
                             >
-                                This club's events
-                            </Link>
+                                Edit
+                            </Link> */}
                         </div>
                     ) : (
                         <div>
                             <br />
-                            <p>Please select a club.</p>
+                            <p>Please select an event.</p>
                         </div>
                     )}
                 </div>
@@ -154,5 +197,6 @@ const ListClubs = () => {
             </div>
         </div>
     );
-};
-export default ListClubs;
+}
+
+export default ListClubEvents;

@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-import RouteClub from "./RouteClub";
-import ClubService from "../connection/services/ClubService";
+import EventService from "../connection/services/EventService";
+import ScheduledEventService from "../connection/services/ScheduledEventService";
 
-const ListClubs = () => {
-
-    const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
-
-    const [clubs, setClubs] = useState([]);
+const ListScheduledEvents = () => {
+    const [scheduledEvents, setScheduledEvents] = useState([]);
     const [numberOfPages, setNumberOfPages] = useState(0);
 
-    const [currentClub, setCurrentClub] = useState(null);
+    const [currentScheduledEvent, setCurrentScheduledEvent] = useState(null);
+    const [currentEventName, setCurrentEventName] = useState("");
     const [currentIndex, setCurrentIndex] = useState(-1);
 
     const [maxButtons] = useState(5);
@@ -22,17 +21,18 @@ const ListClubs = () => {
     const pageSizes = [5, 10, 20];
 
     const refreshList = () => {
-        retrieveClubs();
-        setCurrentClub(null);
+        retrieveScheduledEvents();
+        setCurrentScheduledEvent(null);
+        setCurrentEventName('');
         setCurrentIndex(-1);
     };
 
     useEffect(refreshList, [currentPage, pageSize]);
 
-    const retrieveClubs = () => {
-        ClubService.getAll({ currentPage, pageSize })
+    const retrieveScheduledEvents = () => {
+        ScheduledEventService.getAll({ currentPage, pageSize })
             .then(response => {
-                setClubs(response.data.content);
+                setScheduledEvents(response.data.content);
                 setNumberOfPages(response.data.totalPages);
                 console.log(response);
             })
@@ -53,14 +53,26 @@ const ListClubs = () => {
         setCurrentPage(0);
     };
 
-    const setActiveClub = (club, index) => {
-        setCurrentClub(club);
+    useEffect(() => {
+        if (currentScheduledEvent) {
+            EventService.get(currentScheduledEvent.eventId)
+                .then(response => {
+                    setCurrentEventName(response.data.title);
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        }
+    }, [currentScheduledEvent])
+
+    const setActiveScheduledEvent = (event, index) => {
+        setCurrentScheduledEvent(event);
         setCurrentIndex(index);
     };
 
     return (
         <div>
-            <RouteClub activePage="list" />
             <div className="list row">
                 <div className="my-3">
                     {"Items per Page: "}
@@ -73,60 +85,31 @@ const ListClubs = () => {
                     </select>
                 </div>
                 <div className="col-md-6">
-                    <h4>Clubs list</h4>
+                    <h4>Scheduled events list</h4>
                     <ul className="list-group">
-                        {clubs &&
-                            clubs.map((club, index) => (
+                        {scheduledEvents &&
+                            scheduledEvents.map((scheduledEvent, index) => (
                                 <li
                                     className={
                                         "list-group-item " + (index === currentIndex ? "active" : "")
                                     }
-                                    onClick={() => setActiveClub(club, index)}
+                                    onClick={() => setActiveScheduledEvent(scheduledEvent, index)}
                                     key={index}
                                 >
-                                    {club.name}
+                                    {scheduledEvent.rescheduledDate.slice(0, 10)} @ {scheduledEvent.rescheduledDate.slice(11, 16)}
                                 </li>
                             ))}
                     </ul>
                 </div>
                 <div className="col-md-6">
-                    {currentClub ? (
+                    {currentScheduledEvent ? (
                         <div>
-                            <h4>{currentClub.name}</h4>
-                            <div>
-                                <label>
-                                    <strong>Address:</strong>
-                                </label>{" "}
-                                {currentClub.address}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Open times:</strong>
-                                </label>{" "}
-                                <ul className="list-group">
-                                    {daysOfWeek.map((day, index) => (
-                                        <li
-                                            className={"list-group-item"}
-                                            key={index}
-                                        >
-                                            {day}:{' '}
-                                            {(currentClub.whenOpen[day].from === "00:00:00" && currentClub.whenOpen[day].to === "00:00:00" ? "closed" :
-                                                currentClub.whenOpen[day].from + ' - ' + currentClub.whenOpen[day].to)}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <Link
-                                to={`/events/list/${currentClub.id}`}
-                                className="btn btn-primary m-2"
-                            >
-                                This club's events
-                            </Link>
+                            <h4>{currentEventName}</h4>
                         </div>
                     ) : (
                         <div>
                             <br />
-                            <p>Please select a club.</p>
+                            <p>Please select an scheduled event.</p>
                         </div>
                     )}
                 </div>
@@ -154,5 +137,6 @@ const ListClubs = () => {
             </div>
         </div>
     );
-};
-export default ListClubs;
+}
+
+export default ListScheduledEvents;

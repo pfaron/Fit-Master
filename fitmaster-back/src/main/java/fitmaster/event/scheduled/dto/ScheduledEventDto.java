@@ -15,12 +15,14 @@ import static fitmaster.event.scheduled.ScheduledEvent.CANCELLED;
 public final class ScheduledEventDto extends RepresentationModel<ScheduledEventDto> {
 
     private final long scheduledEventId;
+    private final long eventId;
     private final LocalDateTime originalDate;
     private final LocalDateTime rescheduledDate;
 
 
-    public ScheduledEventDto(long scheduledEventId, LocalDateTime originalDate) {
+    public ScheduledEventDto(long scheduledEventId, long eventId, LocalDateTime originalDate) {
         this.scheduledEventId = scheduledEventId;
+        this.eventId = eventId;
         this.originalDate = originalDate;
         this.rescheduledDate = LocalDateTime.from(originalDate);
     }
@@ -36,6 +38,7 @@ public final class ScheduledEventDto extends RepresentationModel<ScheduledEventD
     public static ScheduledEventDto from(ScheduledEvent scheduledEvent) {
         return new ScheduledEventDto(
                 scheduledEvent.getId(),
+                scheduledEvent.getEvent().getId(),
                 scheduledEvent.getOriginalDate(),
                 scheduledEvent.getRescheduledDate()
         );

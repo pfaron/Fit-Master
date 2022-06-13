@@ -99,7 +99,10 @@ const UpdateCoach = props => {
                             />
                         </div>
                     </form>
-                    <button className="btn btn-primary m-2" onClick={deleteCoach}>
+                    <button
+                        className="btn btn-primary m-2"
+                        onClick={deleteCoach}
+                    >
                         Delete
                     </button>
                     <button
@@ -113,7 +116,7 @@ const UpdateCoach = props => {
                         to={"/coaches/list"}
                         className="btn btn-primary m-2"
                     >
-                        Back
+                        All coaches
                     </Link>
                     <p>{message}</p>
                 </div>
